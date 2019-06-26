@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<title>Memory Grid</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-highway.css">
+<link rel = "stylesheet" type = "text/css" href = "./CSS/base.css">
+<link rel = "stylesheet" type = "text/css" href = "./CSS/memoryGame.css">
+
+<body class="w3-light-grey">
+
+<!-- Content -->
+<div class="w3-content" style="max-width:1000px">
+
+    <!-- Header -->
+    <header class="w3-container w3-center w3-padding-32"> 
+        <h1><b>Memory Grid</b></h1>
+    </header>
+
+    <!-- List view with all of the existing questions -->
+    <div id ="mainContent" class="w3-card w3-margin-right w3-margin-left w3-margin-top">
+        <div id="titleTile" class="w3-container w3-padding">
+            <h4 id="tileContainer" class="gameInfo">Tiles:
+            <h4 id="tileValue" class="gameInfo">0</h4></h4>
+            <h4 class="gameInfo">|</h4>
+            <h4 id="scoreContainer" class="gameInfo">Score:
+            <h4 id="scoreValue" class="gameInfo">0</h4></h4>
+        </div>
+
+        <!-- Tile Board -->
+        <ul id="boardContent" class="w3-ul w3-white">
+
+            <!-- Container for tiles -->
+            <li id="tileBoard"></li>
+
+            <!-- Results -->
+            <li id="summaryResults">
+                <h2>Final Score:</h2>
+                <h1 id="finalScore"></h1>
+                <h2>Rank: <h2 id="playerRank"></h2>
+                </h2><br>
+                <input id="playerName" type="text" placeholder="Name..."><br>
+                <a id="submitScoreBtn" class="w3-margin w3-card" onclick="saveNewScore()">Submit Score</a>
+                <h1>Leaderboard</h1>
+                <div id="leaderBoard">
+                </div>
+            </li>
+
+            <!-- Bottom Tab -->
+            <li id="submissionTab" class="w3-padding-32">
+
+                <!-- Start View -->
+                <div id="startView">
+                    <h3><b>Objective:</b></h3><h5>Pay attention to the green tiles, and then select them once the board is hidden!</h5>
+                    <br><p id="startMessage" class="w3-margin">When you are ready, click on the start button!</p>
+                    <a id="startBtn" class="submitBtn" onclick="initializeGame()">Start</a>
+                </div>
+
+                <!-- Game View -->
+                <div id="gameView">
+                        <p id="startMessage" class="w3-margin">Click the terminate button to quit and view your results.</p>
+                        <a id="stopBtn" class="cancelBtn" onclick="confirmTerminate()">Terminate</a>
+                </div>
+
+                <!-- Summary View -->
+                <div id="summaryView">
+                    <p id="startMessage" class="w3-margin">Click the restart button to try again!</p>
+                    <a id="restartBtn" class="submitBtn" onclick="initializeGame()">Restart</a>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+
+    <a href="../../../../index.html" id="backBtn" class="w3-margin w3-card">Back</a>
+    <div class="spacer"></div>
+
+</div>
+
+<!-- Footer -->
+<footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
+</footer>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="../../../../JS/memoryGrid.js"></script>
+</html>
