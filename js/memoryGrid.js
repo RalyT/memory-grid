@@ -4,8 +4,8 @@ let difficultyLevel = 1;
 let leaderBoardList = [];
 
 /* Sound Effects */
-const sound_levelup = new Audio('../../../../Audio/level_up.wav');
-const sound_leveldown = new Audio('../../../../Audio/level_down.wav');
+const sound_levelup = new Audio('./audio/level_up.wav');
+const sound_leveldown = new Audio('./audio/level_down.wav');
 
 /* Per Level basis data */
 let tileList = [];

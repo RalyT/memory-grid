@@ -1,0 +1,47 @@
+body,h1,h2,h3,h4,h5 { 
+    font-family: "Raleway", sans-serif 
+}
+
+h1 {
+    margin-bottom: 0;
+}
+
+a { 
+    text-decoration : none 
+}
+
+body {
+    min-height: 800px;
+    position: relative;
+}
+
+footer {
+    position:absolute;
+    bottom:0;
+    width:100%;
+}
+
+.spacer{
+    padding-bottom: 80px;
+}
+
+#titleTile {
+    background-color: rgb(215,215,215);
+}
+
+#backBtn {
+    background-color: white;
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  #backBtn:hover {
+      background-color: rgb(215,215,215);
+      color: black;
+  }
