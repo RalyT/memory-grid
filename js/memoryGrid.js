@@ -1,5 +1,6 @@
 /* Current Data */
 let userScore = 0;
+let userLives = 5; 
 let difficultyLevel = 1;
 let leaderBoardList = [];
 
@@ -182,7 +183,9 @@ function checkTile(tile) {
 
     /* Incorrect Tile */
     } else {
-        userScore--;
+        userLives--;
+        if(userScore > 0)
+            userScore--;
         currentIncorrect++;
         tile.style.backgroundColor = "rgb(248, 140, 147)";
     }
@@ -198,8 +201,8 @@ function checkLevelComplete() {
         evaluateDifficulty();
         revertBoard();
         loadLevel();
-    } else if(userScore < 0) {
-        userScore = 0;
+    } else if(userLives <= 0) {
+        userLives = 0;
         terminateGame();
     }
 }
@@ -368,6 +371,7 @@ function resetGameData() {
 }
 
 function updateStats() {
+    $("#lifeValue").html(userLives);
     document.getElementById("scoreValue").innerHTML = userScore;
     document.getElementById("tileValue").innerHTML = currentCorrect;
 }
