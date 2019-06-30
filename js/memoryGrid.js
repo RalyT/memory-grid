@@ -1,6 +1,6 @@
 /* Current Data */
 let userScore = 0;
-let userLives = 5; 
+let userHP = 5; 
 let difficultyLevel = 1;
 let leaderBoardList = [];
 
@@ -16,12 +16,12 @@ let currentIncorrect = 0;
 /* Reference for game view */
 let tileBoard = document.getElementById("tileBoard");
 
-/* On window.load ready handler - Start sequence of program */
-window.onload = function() {
+/* On DOM ready handler - Start sequence of program */
+$(document).ready(function() {
     showStartView();
     hideGameView();
     hideSummaryView();
-}
+});
 
 /* Starts the game */
 function initializeGame() {
@@ -161,10 +161,8 @@ function hideTiles() {
     for(let i = 0; i < tileList.length; i++) {
         tileList[i].style.backgroundColor = "#000";
     }
-
     /* Rotate the board */
     rotateBoard();
-
     /* Allows the tiles to be clickable again after 2s rotation */
     setTimeout(function() {
         for(let i = 0; i < tileList.length; i++) {
@@ -183,7 +181,7 @@ function checkTile(tile) {
 
     /* Incorrect Tile */
     } else {
-        userLives--;
+     userHP--;
         if(userScore > 0)
             userScore--;
         currentIncorrect++;
@@ -201,8 +199,8 @@ function checkLevelComplete() {
         evaluateDifficulty();
         revertBoard();
         loadLevel();
-    } else if(userLives <= 0) {
-        userLives = 0;
+    } else if(userHP <= 0) {
+     userHP = 0;
         terminateGame();
     }
 }
@@ -277,7 +275,7 @@ function displayResults() {
 /*                                                     */
 function getLeaderBoard() {
     $.ajax({
-        url: '/COMP4711/labs/3/MemoryGame/index.html',
+        url: '/MemoryGame/index.html',
         type: 'PUT',
         dataType: 'json',
         success: function(result) {
@@ -363,6 +361,7 @@ function hideSummaryView() {
 /*                                                  */
 /*                                                  */
 function resetGameData() {
+    userHP = 5;
     userScore = 0;
     difficultyLevel = 1;
     tileList = [];
@@ -371,9 +370,9 @@ function resetGameData() {
 }
 
 function updateStats() {
-    $("#lifeValue").html(userLives);
-    document.getElementById("scoreValue").innerHTML = userScore;
-    document.getElementById("tileValue").innerHTML = currentCorrect;
+    $("#hpValue").html(userHP);
+    $("#tileValue").html(currentCorrect);
+    $("#scoreValue").html(userScore);
 }
 
 function cleanTileBoard() {
