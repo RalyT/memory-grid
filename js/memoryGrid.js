@@ -390,11 +390,44 @@ function cleanLeadderBoard() {
 }
 
 function rotateBoard() {
-    document.getElementById("tileBoard").setAttribute("class", "rotatedBoard");
+    $("#tileBoard").addClass("rotatedBoard");
+    $("#tileBoard").css("webkitTransform", "rotate(" + generateRandomDegree() + "deg)");
 }
 
 function revertBoard() {
-    document.getElementById("tileBoard").classList.remove("rotatedBoard");
+    $("#tileBoard").removeClass("rotatedBoard");
+    $("#tileBoard").css("webkitTransform", "rotate(0deg)");
+}
+
+function generateRandomDegree() {
+    let randomDeg = 90;
+    let diffAdjuster = 1;
+
+    /* Increases degrees of rotation for higher levels */
+    if(difficultyLevel > 4) {
+        diffAdjuster = 2;
+    } else if (difficultyLevel > 6) {
+        diffAdjuster = 3;
+    }
+
+    let random = Math.floor(Math.random() * diffAdjuster);
+    switch(random) {
+        case(0):
+            randomDeg = 90;
+            break;
+        case(1):
+            randomDeg = 180;
+            break;
+        case(2):
+            randomDeg = 270;
+            break;
+    }
+
+    /* Random rotation direction */
+    if(Math.floor(Math.random() * 2) == 1)
+        randomDeg *= -1;
+    
+    return randomDeg;
 }
 
 function disableSubmitBtn() {
