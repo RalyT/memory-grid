@@ -70,8 +70,8 @@ function loadLevel() {
             tilesPerLevel = 20;
             numOfCorrectTiles = 5;
             wideBoardWidth = 40;
-            tileHeight = 23;
-            tileWidth = 18;
+            tileHeight = 18;
+            tileWidth = 23;
             break;
         case 5:
             tilesPerLevel = 25;
