@@ -33,10 +33,6 @@
     font-size: 2em;
 }
 
-.tile:hover {
-    background-color: rgb(62, 62, 62);
-}
-
 .rotatedBoard {
     -webkit-transition: 2s;
     -moz-transition: 2s;
@@ -139,6 +135,10 @@
 }
 
 /* For toggling flip */
-.tile-flip {
-  transform: rotateY(180deg);
-} 
+.tile-vert-flip {
+transform: rotateY(180deg);
+}
+
+.tile-horz-flip {
+transform: rotateX(180deg);
+}
