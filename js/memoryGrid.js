@@ -12,6 +12,7 @@ const sound_leveldown = new Audio('./audio/level_down.wav');
 let tileList = [];
 let currentCorrect = 0;
 let currentIncorrect = 0;
+let rotationDegree = 0;
 
 /* Reference for game view */
 let tileBoard = document.getElementById("tileBoard");
@@ -83,8 +84,8 @@ function loadLevel() {
             tilesPerLevel = 30;
             numOfCorrectTiles = 6;
             wideBoardWidth = 40;
-            tileHeight = 18;
-            tileWidth = 14;
+            tileHeight = 15;
+            tileWidth = 18;
             break;
         case 7:
             tilesPerLevel = 36;
@@ -96,8 +97,8 @@ function loadLevel() {
             tilesPerLevel = 42;
             numOfCorrectTiles = 7;
             wideBoardWidth = 40;
-            tileHeight = 14;
-            tileWidth = 12;
+            tileHeight = 12.5;
+            tileWidth = 14.5;
             break;
         case 9:
             tilesPerLevel = 49;
@@ -105,7 +106,7 @@ function loadLevel() {
             tileHeight = 12;
             tileWidth = 12;
             break;
-        default:
+        default:    // Level 1 - 3x3
             tilesPerLevel = 9;
             break;
     }
@@ -113,56 +114,63 @@ function loadLevel() {
     /* Resizing board for levels that are not perfect squares */
     document.getElementById("tileBoard").style.width = wideBoardWidth + '%';
 
-    /* Holding onto a list of index to randomize correct tiles */
+   /* Holding onto a list of indices for tiles */
     listOfIndices = [];
     currentCorrect = numOfCorrectTiles;
     updateStats();
 
-    /* Building and attaching tiles to the board */
     while(numOfTiles != tilesPerLevel) {
-        let newTile = document.createElement("div");
-        newTile.setAttribute("index", numOfTiles);
-        newTile.setAttribute("class", "tile");
-        newTile.setAttribute("correct", "false");
-        newTile.style.width = tileWidth + '%';
-        newTile.style.height = tileHeight + '%';
-        document.getElementById("tileBoard").appendChild(newTile);
+        let $newTile = $("<div>", { class: "tile" });
+        $newTile.append(
+            $("<div>", {class: "tile-inner" }).append(
+                $("<div>", {class: "tile-front"})
+            ).append(
+                $("<div>", {class: "tile-back"})
+            )
+        ).attr("index", numOfTiles);
+
+        $newTile.css("width", tileWidth + '%');
+        $newTile.css("height", tileHeight + '%');
+        $("#tileBoard").append($newTile);
         listOfIndices.push(numOfTiles);
         numOfTiles++;
     }
 
     tileList = document.getElementsByClassName("tile");
 
-    /* Randomize and set correct tiles on the board */
-    shuffle(listOfIndices);
+    /* Set number of correct tiles to be true and shuffle tiles */
     for(let i = 0; i < numOfCorrectTiles; i++) {
-        tileList[listOfIndices[i]].setAttribute("correct", "true");
+        listOfIndices[i] = true;
     }
+    shuffle(listOfIndices);
     revealTiles();
 }
 
 /* Reveals the current tiles on the board, and then hides them after 3 seconds */
 function revealTiles() {
     for(let i = 0; i < tileList.length; i++) {
-        if(tileList[i].getAttribute("correct") === "true") {
-            tileList[i].style.backgroundColor = "#7BF784";
+
+        if(listOfIndices[tileList[i].getAttribute("index")] === true) {
+            $(tileList[i]).find(".tile-back").css("background-color", "#7BF784");
         } else {
-            tileList[i].style.backgroundColor = "rgb(248, 140, 147)";
+            $(tileList[i]).find(".tile-back").css("background-color", "rgb(248, 140, 147)");
         }
+
         /* Temporarily Disabling the tiles */
         tileList[i].setAttribute("onclick", null);
     }
-    setTimeout(hideTiles, 3000);
+    flipAllTiles(tileList);
+    setTimeout(hideTiles, 2500);
 }
 
 /* Hides the tiles and rotates the board */
 function hideTiles() {
     /* First hides the tiles */
-    for(let i = 0; i < tileList.length; i++) {
-        tileList[i].style.backgroundColor = "#000";
-    }
+    flipAllTiles(tileList);
+
     /* Rotate the board */
     rotateBoard();
+
     /* Allows the tiles to be clickable again after 2s rotation */
     setTimeout(function() {
         for(let i = 0; i < tileList.length; i++) {
@@ -173,24 +181,27 @@ function hideTiles() {
 
 /* Checks and reveals if a chosen tile is correct or not */
 function checkTile(tile) {
-    /* Correct Tile */
-    if(tile.getAttribute("correct") == "true") {
-        userScore++;
-        currentCorrect--;
-        tile.style.backgroundColor = "#7BF784";
+    flip(tile);
+    setTimeout(function() {
+        /* Correct Tile */
+        if(listOfIndices[tile.getAttribute("index")] === true) {
+            userScore++;
+            currentCorrect--;
+            tile.style.backgroundColor = "#7BF784";
 
-    /* Incorrect Tile */
-    } else {
-     userHP--;
-        if(userScore > 0)
-            userScore--;
-        currentIncorrect++;
-        tile.style.backgroundColor = "rgb(248, 140, 147)";
-    }
+        /* Incorrect Tile */
+        } else {
+        userHP--;
+            if(userScore > 0)
+                userScore--;
+            currentIncorrect++;
+            tile.style.backgroundColor = "rgb(248, 140, 147)";
+        }
+        updateStats();
+        checkLevelComplete();
+    }, 800);
     /* Disables Tile */
     tile.onclick = null;
-    updateStats();
-    checkLevelComplete();
 }
 
 /* Checks if the current level is completed or if user has lost*/
@@ -291,10 +302,10 @@ function saveNewScore() {
     let newName = document.getElementById("playerName").value;
     if(playerName != "") {
         $.ajax({
-            url: '/COMP4711/labs/3/MemoryGame/index.html',
+            url: '/MemoryGame/index.html',
             type: 'POST',
-            data: { name_field: newName, score_field: userScore },
-            dataType: 'html',
+            data: { name_field: newName, 
+                    score_field: userScore },
             success: function(result) {
                 // console.log("Success: " + result);
             }
@@ -389,6 +400,22 @@ function cleanLeadderBoard() {
     }
 }
 
+function flip(tile) {
+    if(rotationDegree == 90 || rotationDegree == 270) {
+        $(tile).toggleClass("tile-horz-flip");
+        $(tile).find(".tile-inner").toggleClass("tile-horz-flip");
+    } else {
+        $(tile).toggleClass("tile-vert-flip");
+        $(tile).find(".tile-inner").toggleClass("tile-vert-flip");
+    }
+}
+
+function flipAllTiles(tileList) {
+    for(let i = 0; i < tileList.length; i++) {
+        flip(tileList[i]);
+    }
+}
+
 function rotateBoard() {
     $("#tileBoard").addClass("rotatedBoard");
     $("#tileBoard").css("webkitTransform", "rotate(" + generateRandomDegree() + "deg)");
@@ -406,7 +433,7 @@ function generateRandomDegree() {
     /* Increases degrees of rotation for higher levels */
     if(difficultyLevel > 4) {
         diffAdjuster = 2;
-    } else if (difficultyLevel > 6) {
+    } else if (difficultyLevel > 7) {
         diffAdjuster = 3;
     }
 
@@ -426,7 +453,8 @@ function generateRandomDegree() {
     /* Random rotation direction */
     if(Math.floor(Math.random() * 2) == 1)
         randomDeg *= -1;
-    
+
+    rotationDegree = randomDeg;
     return randomDeg;
 }
 
