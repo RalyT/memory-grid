@@ -113,19 +113,24 @@ function loadLevel() {
     /* Resizing board for levels that are not perfect squares */
     document.getElementById("tileBoard").style.width = wideBoardWidth + '%';
 
-    /* Holding onto a list of indices for tiles */
+   /* Holding onto a list of indices for tiles */
     listOfIndices = [];
     currentCorrect = numOfCorrectTiles;
     updateStats();
 
-    /* Building and attaching tiles to the board */
     while(numOfTiles != tilesPerLevel) {
-        let newTile = document.createElement("div");
-        newTile.setAttribute("index", numOfTiles);
-        newTile.setAttribute("class", "tile");
-        newTile.style.width = tileWidth + '%';
-        newTile.style.height = tileHeight + '%';
-        document.getElementById("tileBoard").appendChild(newTile);
+        let $newTile = $("<div>", { class: "tile tile-flip" });
+        $newTile.append(
+            $("<div>", {class: "tile-inner tile-flip" }).append(
+                $("<div>", {class: "tile-front"})
+            ).append(
+                $("<div>", {class: "tile-back"})
+            )
+        ).attr("index", numOfTiles);
+
+        $newTile.css("width", tileWidth + '%');
+        $newTile.css("height", tileHeight + '%');
+        $("#tileBoard").append($newTile);
         listOfIndices.push(numOfTiles);
         numOfTiles++;
     }
@@ -137,7 +142,6 @@ function loadLevel() {
         listOfIndices[i] = true;
     }
     shuffle(listOfIndices);
-
     revealTiles();
 }
 
@@ -145,24 +149,24 @@ function loadLevel() {
 function revealTiles() {
     for(let i = 0; i < tileList.length; i++) {
         if(listOfIndices[tileList[i].getAttribute("index")] === true) {
-            tileList[i].style.backgroundColor = "#7BF784";
+            $(tileList[i]).find(".tile-back").css("background-color", "#7BF784");
         } else {
-            tileList[i].style.backgroundColor = "rgb(248, 140, 147)";
+            $(tileList[i]).find(".tile-back").css("background-color", "rgb(248, 140, 147)");
         }
         /* Temporarily Disabling the tiles */
         tileList[i].setAttribute("onclick", null);
     }
-    setTimeout(hideTiles, 3000);
+    setTimeout(hideTiles, 2500);
 }
 
 /* Hides the tiles and rotates the board */
 function hideTiles() {
     /* First hides the tiles */
-    for(let i = 0; i < tileList.length; i++) {
-        tileList[i].style.backgroundColor = "#000";
-    }
+    flipAllTiles(tileList);
+
     /* Rotate the board */
     rotateBoard();
+
     /* Allows the tiles to be clickable again after 2s rotation */
     setTimeout(function() {
         for(let i = 0; i < tileList.length; i++) {
@@ -174,23 +178,26 @@ function hideTiles() {
 /* Checks and reveals if a chosen tile is correct or not */
 function checkTile(tile) {
     /* Correct Tile */
-    if(listOfIndices[tile.getAttribute("index")] === true) {
-        userScore++;
-        currentCorrect--;
-        tile.style.backgroundColor = "#7BF784";
-
-    /* Incorrect Tile */
-    } else {
-     userHP--;
-        if(userScore > 0)
-            userScore--;
-        currentIncorrect++;
-        tile.style.backgroundColor = "rgb(248, 140, 147)";
-    }
+    flip(tile);
+    setTimeout(function() {
+        /* Correct Tile */
+        if(listOfIndices[tile.getAttribute("index")] === true) {
+            userScore++;
+            currentCorrect--;
+            tile.style.backgroundColor = "#7BF784";
+        /* Incorrect Tile */
+        } else {
+            userHP--;
+            if(userScore > 0)
+                userScore--;
+            currentIncorrect++;
+            tile.style.backgroundColor = "rgb(248, 140, 147)";
+        }
+        updateStats();
+        checkLevelComplete();
+    }, 800);
     /* Disables Tile */
     tile.onclick = null;
-    updateStats();
-    checkLevelComplete();
 }
 
 /* Checks if the current level is completed or if user has lost*/
@@ -389,6 +396,18 @@ function cleanLeadderBoard() {
     }
 }
 
+function flip(tile) {
+    $(tile).toggleClass("tile-flip");
+    $(tile).find(".tile-inner").toggleClass("tile-flip");
+}
+
+function flipAllTiles(tileList) {
+    for(let i = 0; i < tileList.length; i++) {
+        flip(tileList[i]);
+    }
+}
+
+
 function rotateBoard() {
     $("#tileBoard").addClass("rotatedBoard");
     $("#tileBoard").css("webkitTransform", "rotate(" + generateRandomDegree() + "deg)");
@@ -406,7 +425,7 @@ function generateRandomDegree() {
     /* Increases degrees of rotation for higher levels */
     if(difficultyLevel > 4) {
         diffAdjuster = 2;
-    } else if (difficultyLevel > 6) {
+    } else if (difficultyLevel > 7) {
         diffAdjuster = 3;
     }
 
