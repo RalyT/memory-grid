@@ -119,6 +119,7 @@ function loadLevel() {
     currentCorrect = numOfCorrectTiles;
     updateStats();
 
+    /* Building the tiles */
     while(numOfTiles != tilesPerLevel) {
         let $newTile = $("<div>", { class: "tile" });
         $newTile.append(
@@ -127,7 +128,7 @@ function loadLevel() {
             ).append(
                 $("<div>", {class: "tile-back"})
             )
-        ).attr("index", numOfTiles);
+        ).attr("index", numOfTiles); // index of tile
 
         $newTile.css("width", tileWidth + '%');
         $newTile.css("height", tileHeight + '%');
@@ -401,7 +402,8 @@ function cleanLeadderBoard() {
 }
 
 function flip(tile) {
-    if(rotationDegree == 90 || rotationDegree == 270) {
+    /* Keeps the tile flips horizontal to the user */
+    if(Math.abs(rotationDegree) == 90 || Math.abs(rotationDegree) == 270) {
         $(tile).toggleClass("tile-horz-flip");
         $(tile).find(".tile-inner").toggleClass("tile-horz-flip");
     } else {
@@ -454,7 +456,7 @@ function generateRandomDegree() {
     if(Math.floor(Math.random() * 2) == 1)
         randomDeg *= -1;
 
-    rotationDegree = randomDeg;
+    rotationDegree = randomDeg; // Helps determine tile flip axis
     return randomDeg;
 }
 

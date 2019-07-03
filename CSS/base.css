@@ -6,6 +6,10 @@ h1 {
     margin-bottom: 0;
 }
 
+h5 {
+    display: inline-block;
+}
+
 a { 
     text-decoration : none 
 }
@@ -45,3 +49,17 @@ footer {
       background-color: rgb(215,215,215);
       color: black;
   }
+
+.notification-text {
+    color: #FD4752;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.valid-text {
+    color: #7BF784;
+    margin-top: 0;
+    margin-bottom: 0;
+    text-shadow: 1px 1px #000;
+    /* display: inline-block; */
+}

@@ -23,7 +23,7 @@
     <div id ="mainContent" class="w3-card w3-margin-right w3-margin-left w3-margin-top">
         <div id="titleTile" class="w3-container w3-padding">
             <h4 class="gameInfo">Lives:
-                <h4 id="lifeValue" class="gameInfo">0</h4>
+                <h4 id="hpValue" class="gameInfo">0</h4>
             </h4>
             <h4 class="gameInfo">|</h4>
             <h4 class="gameInfo">Tiles Remaining:
@@ -59,7 +59,9 @@
 
                 <!-- Start View -->
                 <div id="startView">
-                    <h3><b>Objective:</b></h3><h5>Pay attention to the green tiles, and then select them once the board is hidden!</h5>
+                    <h3><b>Objective:</b></h3>
+                    <h5>Pay attention to the&nbsp</h5><h5 class="valid-text"> green tiles</h5><h5>, and then select them once the board is hidden!</h5>
+                    <br><h5>If you select an&nbsp</h5><h5 class="notification-text">incorrect tile</h5><h5>, you will lose a point from your life and score!</h5>
                     <br><p id="startMessage" class="w3-margin">When you are ready, click on the start button!</p>
                     <a id="startBtn" class="submitBtn" onclick="initializeGame()">Start</a>
                 </div>
