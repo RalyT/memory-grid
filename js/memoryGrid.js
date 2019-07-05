@@ -191,7 +191,8 @@ function checkTile(tile) {
 
         /* Incorrect Tile */
         } else {
-        userHP--;
+            if(userHP > 0)
+                userHP--;
             if(userScore > 0)
                 userScore--;
             currentIncorrect++;
