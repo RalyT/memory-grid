@@ -287,7 +287,7 @@ function displayResults() {
 /*                                                     */
 function getLeaderBoard() {
     $.ajax({
-        url: '/MemoryGame/index.html',
+        url: 'http://www.ralytan.com/api/MemoryGame/scores',
         type: 'PUT',
         dataType: 'json',
         success: function(result) {
@@ -303,7 +303,7 @@ function saveNewScore() {
     let newName = document.getElementById("playerName").value;
     if(playerName != "") {
         $.ajax({
-            url: '/MemoryGame/index.html',
+            url: 'http://www.ralytan.com/api/MemoryGame/scores',
             type: 'POST',
             data: { name_field: newName, 
                     score_field: userScore },
